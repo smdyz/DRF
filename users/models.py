@@ -8,15 +8,14 @@ NULLABLE = {'null': True, 'blank': True}
 
 
 class User(AbstractUser):
-    username = None
     email = models.EmailField(unique=True, verbose_name='почта')
     password = models.CharField(verbose_name='пароль')
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    # USERNAME_FIELD = 'email'
+    # REQUIRED_FIELDS = []
 
     def __str__(self):
-        return self.email
+        return self.username
 
     class Meta:
         verbose_name = 'пользователь'
