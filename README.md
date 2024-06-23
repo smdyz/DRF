@@ -1,3 +1,4 @@
 # DRF homework 
 
-![image](https://github.com/smdyz/DRF/assets/152782716/19176a25-675a-4ad1-8a10-46abd60934e3)
+![image](https://github.com/smdyz/DRF/assets/152782716/721222c6-6314-453a-ba35-558a194d0d37)
+
