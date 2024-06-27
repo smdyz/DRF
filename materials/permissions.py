@@ -27,4 +27,4 @@ class IsModerOrOwner(BasePermission):
     def has_permission(self, request, view):
         if request.user.groups.filter(name='moder').exists():
             return True
-        return bool(request.user and view.get_object().owner)
+        return request.user == view.get_object().owner

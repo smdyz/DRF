@@ -1,6 +1,9 @@
 from rest_framework import serializers
 
 from .models import Course, Lesson
+from .validators import UrlsValidator
+
+
 # from users.serializers import UserSerializer
 
 
@@ -9,11 +12,12 @@ class LessonsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
         fields = '__all__'
+        validators = [UrlsValidator(field='url')]
 
 
 class CourseSerializer(serializers.ModelSerializer):
-    lesson_count = serializers.SerializerMethodField()
-    lessons = LessonsSerializer(source='lesson_set', many=True, required=False)
+    lesson_count = serializers.SerializerMethodField(read_only=True)
+    lessons = LessonsSerializer(source='lesson_set', many=True, required=False, read_only=True)
     # owner = UserSerializer(source='user_set', many=True, required=False)
 
     class Meta:
