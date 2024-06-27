@@ -45,5 +45,6 @@ class SubForCourseUpdate(models.Model):
         return f'{self.user} {self.course}'
 
     class Meta:
+        unique_together = ('user', 'course')
         verbose_name = 'подписка на курс'
         verbose_name_plural = 'подписки на курсы'

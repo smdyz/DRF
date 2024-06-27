@@ -2,7 +2,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase, force_authenticate
 
-from materials.models import Lesson
+from materials.models import Lesson, SubForCourseUpdate
 from materials.forms import UpdateLessonForm
 from users.models import User
 

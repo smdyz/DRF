@@ -81,22 +81,20 @@ class LessonDeleteAPIView(generics.DestroyAPIView):
     permission_classes = [AllowAny]
 
 
-class SubCreateAPIView(generics.CreateAPIView):
+class SubscriptionAPIView(generics.CreateAPIView):
     queryset = SubForCourseUpdate.objects.all()
     permission_classes = [AllowAny]
 
     def post(self, *args, **kwargs):
         user = self.request.user
-        course_id = self.request.data
-        course_item = get_object_or_404(Course, kwargs[course_id])
+        course_id = self.request.data.get(Course.pk)
+        course_item = get_object_or_404(Course, id=course_id)
 
-        subs_item = {'user': user, 'course': course_item}
-
-        # Если подписка у пользователя на этот курс есть - удаляем ее
-        if subs_item.exists():
-            message = 'подписка удалена'
-        # Если подписки у пользователя на этот курс нет - создаем ее
+        subscription, created = SubForCourseUpdate.objects.get_or_create(user=user, course=course_item)
+        if not created:
+            subscription.delete()
+            message = 'Подписка удалена'
         else:
-            message = 'подписка добавлена'
-        # Возвращаем ответ в API
+            message = 'Подписка добавлена'
+
         return Response({"message": message})
