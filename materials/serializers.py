@@ -18,7 +18,6 @@ class LessonsSerializer(serializers.ModelSerializer):
 class CourseSerializer(serializers.ModelSerializer):
     lesson_count = serializers.SerializerMethodField(read_only=True)
     lessons = LessonsSerializer(source='lesson_set', many=True, required=False, read_only=True)
-    # owner = UserSerializer(source='user_set', many=True, required=False)
 
     class Meta:
         model = Course

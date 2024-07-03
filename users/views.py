@@ -1,11 +1,12 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated, IsAdminUser, BasePermission
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 
 from .models import Payments, User
 from .serializers import PaymentsSerializer, UserSerializer
 from materials.permissions import IsStuff, IsOwner
+from users.services import create_product_with_price, create_stripe_session
 
 
 class PaymentsListAPIView(generics.ListAPIView):
@@ -14,7 +15,23 @@ class PaymentsListAPIView(generics.ListAPIView):
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_fields = ('payment_way', 'paid_course', 'paid_lesson', 'user',)
     ordering_fields = ('payment_date',)
-    permission_classes = [IsAdminUser | IsStuff]
+    permission_classes = [AllowAny]
+
+
+class PaymentsCreateAPIView(generics.CreateAPIView):
+    """Контроллер создания платежа"""
+    serializer_class = PaymentsSerializer
+    queryset = Payments.objects.all()
+    permission_classes = [AllowAny]
+
+    def perform_create(self, serializer):
+        payment = serializer.save(user=self.request.user)
+        product = f'{payment.paid_course}' if payment.paid_course else f'{payment.paid_lesson}'
+        price = create_product_with_price(name=product, unit_amount=payment.amount)
+        session_id, payment_link = create_stripe_session(price)
+        payment.session_id = session_id
+        payment.link = payment_link
+        payment.save()
 
 
 class UserCreateAPIView(generics.CreateAPIView):

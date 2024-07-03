@@ -23,6 +23,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     "django_filters",
+    "drf_yasg",
+    "corsheaders",
 
     "materials",
     "users",
@@ -36,6 +38,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -134,4 +137,24 @@ REST_FRAMEWORK = {
     ),
 }
 
+# CORS_ALLOWED_ORIGINS = [
+#     'http://localhost:8000',
+#     'http://127.0.0.1:8000/',
+#     'https://stripe.com/docs/api',
+#     'https://stripe.com/docs/api/products/create',
+#     'https://stripe.com/docs/api/prices/create',
+#     'https://stripe.com/docs/api/checkout/sessions/create',
+# ]
+#
+# CSRF_TRUSTED_ORIGINS = [
+#     'http://127.0.0.1:8000/',
+# ]
 
+CORS_ALLOW_ALL_ORIGINS = True
+
+PROD_CREATE_URL = os.getenv('PROD_CREATE_URL')
+AMOUNT_CREATE_URL = os.getenv('AMOUNT_CREATE_URL')
+SESSION_CREATE_URL = os.getenv('SESSION_CREATE_URL')
+PAY_API = os.getenv('PAY_API')
+
+STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
