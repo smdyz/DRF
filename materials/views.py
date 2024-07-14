@@ -8,6 +8,7 @@ from .paginators import MaterialPaginator
 from .permissions import IsModer, IsOwner, IsModerOrOwner
 from .serializers import CourseSerializer, LessonsSerializer
 from .forms import UpdateLessonForm
+from materials.tasks import sending_mails
 
 
 # from django.contrib.auth.models import Group
@@ -41,6 +42,16 @@ class CourseViewSet(viewsets.ModelViewSet):
     #     else:
     #         permission_classes = [IsAuthenticated]
     #     return [permission() for permission in permission_classes]
+
+
+class CourseUpdateAPIViewSet(generics.RetrieveUpdateAPIView):
+    serializer_class = CourseSerializer
+    queryset = Course.objects.all()
+    permission_classes = [AllowAny]
+
+    def get_object(self):
+        print('запускаю рассылку')
+        sending_mails.delay(pk=self.kwargs['pk'])
 
 
 class LessonCreateAPIView(generics.CreateAPIView):
