@@ -1,11 +1,11 @@
 from django.shortcuts import get_object_or_404
 from requests import Response
 from rest_framework import viewsets, generics
-from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
+from rest_framework.permissions import AllowAny
 
 from .models import Course, Lesson, SubForCourseUpdate
 from .paginators import MaterialPaginator
-from .permissions import IsModer, IsOwner, IsModerOrOwner
+#  from .permissions import IsModer, IsOwner, IsModerOrOwner
 from .serializers import CourseSerializer, LessonsSerializer
 from .forms import UpdateLessonForm
 from materials.tasks import sending_mails
@@ -67,7 +67,7 @@ class LessonCreateAPIView(generics.CreateAPIView):
 class LessonListAPIView(generics.ListAPIView):
     serializer_class = LessonsSerializer
     queryset = Lesson.objects.all()
-    permission_classes = [AllowAny] # AllowAny
+    permission_classes = [AllowAny]     # AllowAny
     # pagination_class = MaterialPaginator
 
 

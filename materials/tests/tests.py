@@ -1,8 +1,7 @@
-from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APITestCase, force_authenticate
+from rest_framework.test import APITestCase
 
-from materials.models import Lesson, SubForCourseUpdate
+from materials.models import Lesson
 from materials.forms import UpdateLessonForm
 from users.models import User
 
@@ -31,7 +30,8 @@ class LessonTestCase(APITestCase):
 
         self.assertEquals(
             response.json(),
-            {'id': 2, 'name': 'test', 'preview': None, 'description': 'test', 'url': None, 'course': None, 'owner': None}
+            {'id': 2, 'name': 'test', 'preview': None, 'description': 'test', 'url': None, 'course': None,
+             'owner': None}
         )
 
         self.assertTrue(
@@ -52,7 +52,8 @@ class LessonTestCase(APITestCase):
 
         self.assertEquals(
             response.json(),
-            [{'id': 4, 'name': 'test', 'preview': None, 'description': 'test', 'url': None, 'course': None, 'owner': None}]
+            [{'id': 4, 'name': 'test', 'preview': None, 'description': 'test', 'url': None, 'course': None,
+                'owner': None}]
         )
 
     def test_retrieve_lesson(self):
@@ -67,7 +68,8 @@ class LessonTestCase(APITestCase):
 
         self.assertEquals(
             response.json(),
-            {'id': 5, 'name': 'test', 'preview': None, 'description': 'test', 'url': None, 'course': None, 'owner': None}
+            {'id': 5, 'name': 'test', 'preview': None, 'description': 'test', 'url': None, 'course': None,
+             'owner': None}
         )
 
     def test_update_lesson(self):
@@ -105,6 +107,7 @@ class LessonTestCase(APITestCase):
         self.assertEquals(Lesson.objects.count(), 0)
 
         # self.assertRedirects(response, expected_url='/lesson/')
+
 
 class SubTestCase(APITestCase):
     def setUp(self):

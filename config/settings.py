@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     "django_filters",
     "drf_yasg",
     "corsheaders",
+    "django_celery_beat",
 
     "materials",
     "users",
@@ -136,6 +137,9 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     ),
 }
+
+CACHE_ENABLED = os.getenv('CACHE_ENABLED')
+CACHES_LOCATION = os.getenv('CACHES_LOCATION')
 
 # CORS_ALLOWED_ORIGINS = [
 #     'http://localhost:8000',
