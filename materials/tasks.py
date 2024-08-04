@@ -25,7 +25,7 @@ def deactivate_user():
     user = User.objects.filter(is_active=True)
     now = datetime.now(timezone.utc)
     for user in user:
-        if user.last_login and now - user.last_login > timedelta(days=0):
-            # user.is_active = False
-            # user.save()
+        if user.last_login and now - user.last_login > timedelta(days=30):
+            user.is_active = False
+            user.save()
             print(f'{user.username} is deactivated')
