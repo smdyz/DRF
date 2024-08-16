@@ -1,9 +1,9 @@
 from django import forms
 
-from .models import Lesson
+from .models import Product
 
 
-class UpdateLessonForm(forms.ModelForm):
+class UpdateProductForm(forms.ModelForm):
     class Meta:
-        model = Lesson
+        model = Product
         fields = ('name', 'description',)

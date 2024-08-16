@@ -3,11 +3,11 @@ from requests import Response
 from rest_framework import viewsets, generics
 from rest_framework.permissions import AllowAny
 
-from .models import Course, Lesson, SubForCourseUpdate
+from .models import Product, Category, SubForProductUpdate
 from .paginators import MaterialPaginator
 #  from .permissions import IsModer, IsOwner, IsModerOrOwner
-from .serializers import CourseSerializer, LessonsSerializer
-from .forms import UpdateLessonForm
+from .serializers import ProductSerializer, CategorySerializer
+from .forms import UpdateProductForm
 from materials.tasks import sending_mails
 
 
@@ -21,9 +21,9 @@ from materials.tasks import sending_mails
 #     print('Editors' in [group.name for group in groups])
 
 
-class CourseViewSet(viewsets.ModelViewSet):
-    serializer_class = CourseSerializer
-    queryset = Course.objects.all()
+class CategoryViewSet(viewsets.ModelViewSet):
+    serializer_class = CategorySerializer
+    queryset = Category.objects.all()
     permission_classes = [AllowAny]
     pagination_class = MaterialPaginator
 
@@ -44,9 +44,9 @@ class CourseViewSet(viewsets.ModelViewSet):
     #     return [permission() for permission in permission_classes]
 
 
-class CourseUpdateAPIViewSet(generics.RetrieveUpdateAPIView):
-    serializer_class = CourseSerializer
-    queryset = Course.objects.all()
+class CategoryUpdateAPIViewSet(generics.RetrieveUpdateAPIView):
+    serializer_class = CategorySerializer
+    queryset = Category.objects.all()
     permission_classes = [AllowAny]
 
     def get_object(self):
@@ -54,54 +54,54 @@ class CourseUpdateAPIViewSet(generics.RetrieveUpdateAPIView):
         sending_mails.delay(pk=self.kwargs['pk'])
 
 
-class LessonCreateAPIView(generics.CreateAPIView):
-    serializer_class = LessonsSerializer
+class ProductCreateAPIView(generics.CreateAPIView):
+    serializer_class = ProductSerializer
     permission_classes = [AllowAny]
 
     # def perform_create(self, serializer):
-    #     new_lesson = serializer.save()
-    #     new_lesson.owner = self.request.user
-    #     new_lesson.save()
+    #     new_Product = serializer.save()
+    #     new_Product.owner = self.request.user
+    #     new_Product.save()
 
 
-class LessonListAPIView(generics.ListAPIView):
-    serializer_class = LessonsSerializer
-    queryset = Lesson.objects.all()
+class ProductListAPIView(generics.ListAPIView):
+    serializer_class = ProductSerializer
+    queryset = Product.objects.all()
     permission_classes = [AllowAny]     # AllowAny
     # pagination_class = MaterialPaginator
 
 
-class LessonRetrieveAPIView(generics.RetrieveAPIView):
-    serializer_class = LessonsSerializer
-    queryset = Lesson.objects.all()
+class ProductRetrieveAPIView(generics.RetrieveAPIView):
+    serializer_class = ProductSerializer
+    queryset = Product.objects.all()
     # permission_classes = [IsAuthenticated | IsModerOrOwner]
     permission_classes = [AllowAny]
 
 
-class LessonUpdateAPIView(generics.UpdateAPIView):
-    serializer_class = LessonsSerializer
-    queryset = Lesson.objects.all()
+class ProductUpdateAPIView(generics.UpdateAPIView):
+    serializer_class = ProductSerializer
+    queryset = Product.objects.all()
     # permission_classes = [IsAdminUser | IsModerOrOwner]
     permission_classes = [AllowAny]
-    form = UpdateLessonForm
+    form = UpdateProductForm
 
 
-class LessonDeleteAPIView(generics.DestroyAPIView):
-    queryset = Lesson.objects.all()
+class ProductDeleteAPIView(generics.DestroyAPIView):
+    queryset = Product.objects.all()
     # permission_classes = [IsAdminUser | IsOwner]
     permission_classes = [AllowAny]
 
 
 class SubscriptionAPIView(generics.CreateAPIView):
-    queryset = SubForCourseUpdate.objects.all()
+    queryset = SubForProductUpdate.objects.all()
     permission_classes = [AllowAny]
 
     def post(self, *args, **kwargs):
         user = self.request.user
-        course_id = self.request.data.get(Course.pk)
-        course_item = get_object_or_404(Course, id=course_id)
+        product_id = self.request.data.get(Product.pk)
+        product_item = get_object_or_404(Product, id=product_id)
 
-        subscription, created = SubForCourseUpdate.objects.get_or_create(user=user, course=course_item)
+        subscription, created = SubForProductUpdate.objects.get_or_create(user=user, product=product_item)
         if not created:
             subscription.delete()
             message = 'Подписка удалена'
